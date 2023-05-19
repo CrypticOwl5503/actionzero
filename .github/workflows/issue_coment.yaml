@@ -32,7 +32,7 @@ jobs:
           Comment but from the API not from the action
         env:
           GITHUB TKEN : ${{ secrets.GITHUB_TOKEN }}
-          ORGANIZATION: ${{ github.event.organisation.login }}
+          ORGANIZATION: ${{ github.event.organization.login }}
           REPOSIORY: ${{ github.event.repository.name }}
           ISSUE_NUMBER: ${{ github.event.issue.number }}
           
