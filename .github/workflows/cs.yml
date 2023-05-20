@@ -35,7 +35,7 @@ jobs:
     #Printing comment(have used Create or Update Comment Github 
     #Action on the Marketplace here
       - name: Comment on Issue
-        uses: actions/github-script@v5
+        uses: actions/github-script@v6
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
