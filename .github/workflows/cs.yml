@@ -27,7 +27,7 @@ jobs:
           curl -o image.jpg https://thispersondoesnotexist.com/image
           
       - name: Upload Image as Comment
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: generated-image
           path: image.jpg
@@ -35,7 +35,7 @@ jobs:
     #Printing comment(have used Create or Update Comment Github 
     #Action on the Marketplace here
       - name: Comment on Issue
-        uses: actions/github-script@v4
+        uses: actions/github-script@v5
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
