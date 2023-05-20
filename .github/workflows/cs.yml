@@ -1,18 +1,53 @@
 #Workflow name
 name: Create Github Action to comment an AI generated image and a quote
 
+#Trigger workflow when issue is raised
 on: 
   issues:
     type:
       - opened
-#Trigger workflow when issue is raised
+
 jobs:
-  ai_image:
+  ai_image_and_quote:
     runs-on: ubuntu-latest
-    
-    steps:
+    steps: 
+    #Ensuring access to repo files
       - name: Checkout Repository
         uses: actions/checkout@v3
         
+    #Getting username to print in message
+      - name: Get User
+        id: usern
+        run: echo "set-output name=user_n::${{ github.event.issue.user.login }}"
+    
+    #Get AI generated image
+      - name: AI Image Generator
+        id: generate_ai
+        run:
+          curl -s https://this-person-does-not-exist.com/en > ai.json
+          echo "::set-output name=ai_image::$(jp -r '.img, ai.json)"
+    
+    #Printing comment(have used Create or Update Comment Github 
+    #Action on the Marketplace here
+      #Trigger workflow when issue is raised
+      - name: Create comment
+        uses: peter-evans/create-or-update-comment@v3
+        with:
+          issue-number: 1
+          body: |
+            Hey there, ${{ steps.usern.outputs.user_n }}! While you were raisisng an issue, we decided to click a photo of you!
+            
+            ![Image](${{ steps.generate_ai.outputs.ai_image }})
+            
+            Is this not your photo? We're sorry, the camera was too bedazelled by your beauty
+            to function properly.
+            
+            [1]: https://github.com/peter-evans/create-or-update-comment
+          reactions: '+1'
+        
+    
+    
+    
+    
         
     
