@@ -35,12 +35,12 @@ jobs:
     #Printing comment(have used Create or Update Comment Github 
     #Action on the Marketplace here
       - name: Comment on Issue
-        uses: actions/github-script@v4
+        uses: actions/github-script@v6
         with:
-          github-token: ${{ secrets.TOKEN }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            const fs = require('fs');
-            const image = fs.readFileSync('image.jpg', 'base64');
+            const fs = require('fs')
+            const image = fs.readFileSync('image.jpg', 'base64')
             
             const body = `![Generated Image](data:image/jpeg;base64,${image})`;
             github.issues.createComment({
