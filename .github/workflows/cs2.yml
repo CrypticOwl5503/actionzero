@@ -1,5 +1,5 @@
 #Workflow name
-name: Create Github Action to comment an AI generated image and a quote
+name: Create Github Action to comment an AI generated image
 
 #Trigger workflow when issue is raised
 on: 
@@ -21,29 +21,34 @@ jobs:
         run: echo "set-output name=user_n::${{ github.event.issue.user.login }}"
     
     #Get AI generated image
+      - name: Python set up
+        uses: actions/setup-python@v3
+        with:
+          python-version: '3.x'
+      - name: Install dependencies
+         python -m pip install --upgrade pip
+         pip install requests
       - name: AI Image Generator
         id: generate_ai
         run: |
-          curl -o image.jpg https://thispersondoesnotexist.com/image
-          
-      - name: Upload Image as Comment
-        uses: actions/upload-artifact@v3
-        with:
-          name: generated-image
-          path: image.jpg
-    
+          echo"::set-output name=ai_image::$(ai=requests.get(f'https://this-person-does-not-exist.com/en/info.0.json'); ai_image=ai.json()['img']; print(ai_image)")"
+        env:
+          PYTHONUNBUFFERED: 1
+  
     #Printing comment(have used Create or Update Comment Github 
     #Action on the Marketplace here
-      - name: Create comment
-        uses: peter-evans/create-or-update-comment@v3
+      - name: Comment on Issue
+        uses: actions/github-script@v6
         with:
-          issue-number: 1
-          body: |
-            ![Generated Image](data:image/jpeg;base64,$(base64 -w 0 image.jpg))
-
-
-            [1]: https://github.com/peter-evans/create-or-update-comment
-          reactions: '+1'
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            ![Image](${{ steps.generate_ai.outputs.ai_generate }})';
+            github.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: body
+            });
 
     
     
