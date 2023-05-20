@@ -31,7 +31,7 @@ jobs:
       - name: AI Image Generator
         id: generate_ai
         run: |
-          echo"::set-output name=ai_image::$(ai=requests.get(f'https://this-person-does-not-exist.com/en/info.0.json'); ai_image=ai.json()['img']; print(ai_image)")"
+          echo"::set-output name=ai_image::$(python -c "import requests; ai=requests.get(f'https://this-person-does-not-exist.com/en/info.0.json'); ai_image=ai.json()['img']; print(ai_image)")"
         env:
           PYTHONUNBUFFERED: 1
   
