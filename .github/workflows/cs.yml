@@ -35,9 +35,9 @@ jobs:
     #Printing comment(have used Create or Update Comment Github 
     #Action on the Marketplace here
       - name: Comment on Issue
-        uses: actions/github-script@v6
+        uses: actions/github-script@v4
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+          github-token: ${{ secrets.TOKEN }}
           script: |
             const fs = require('fs');
             const image = fs.readFileSync('image.jpg', 'base64');
