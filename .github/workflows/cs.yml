@@ -24,7 +24,7 @@ jobs:
       - name: AI Image Generator
         id: generate_ai
         run:
-          curl -s https://this-person-does-not-exist.com/en > ai.json
+          curl -s https://this-person-does-not-exist.com/en/info.0.json > ai.json
           echo "::set-output name=ai_image::$(jp -r '.img' ai.json)"
     
     #Printing comment(have used Create or Update Comment Github 
