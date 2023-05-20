@@ -1,58 +1,32 @@
-# Define the name of the workflow
-name: Comment comic on issue
-
-# Define the trigger for the workflow
+name: Comment Comic Image on New Issue
 on:
-  # Trigger the workflow when an issue is opened or reopened
   issues:
-    types: [opened, reopened]
+    types:
+      - opened
 
-# Define the jobs for the workflow
 jobs:
-  # Define a job to comment the comic on the issue
-  comment-comic:
-    # Specify the runner for the job
+  comment_comic_image:
     runs-on: ubuntu-latest
-
-    # Define the steps for the job
+    
     steps:
-      # Check out the repository
-      - uses: actions/checkout@v2
+      - name: Checkout Repository
+        uses: actions/checkout@v2
 
-      # Set up Python
-      - uses: actions/setup-python@v2
-        with:
-          python-version: '3.x'
-
-      # Install requests and BeautifulSoup libraries
-      - name: Install dependencies
+      - name: Extract Comic Image URL
+        id: extract_comic_image
         run: |
-          python -m pip install --upgrade pip
-          pip install requests BeautifulSoup4
+          comic_url=$(curl -s https://explosm.net/comics/kris-watch | grep -oP 'data-image="(\K[^"]+)')
+          echo "::set-output name=comic_url::$comic_url"
 
-      # Run the Python script to extract the image source from explosm.net
-      - name: Run script
-        run: python extract_image.py
-        # Save the output of the script as an environment variable
-        env:
-          COMIC_URL: ${{ steps.run-script.outputs.comic-url }}
-
-      # Comment the image on the issue using GitHub Script action
-      - name: Comment comic
-        uses: actions/github-script@v5
+      - name: Comment Comic Image
+        uses: actions/github-script@v4
         with:
-          # Use JavaScript to access GitHub API and comment on the issue
+          github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            // Get the context of the issue event
-            const issue = context.issue;
-            // Get the image source from the environment variable
-            const comicUrl = process.env.COMIC_URL;
-            // Create a comment body with markdown syntax to embed the image
-            const commentBody = `![comic](${comicUrl})`;
-            // Post the comment using GitHub API
-            await github.issues.createComment({
-              owner: issue.owner,
-              repo: issue.repo,
-              issue_number: issue.number,
-              body: commentBody,
+            const issueComment = `![Cyanide & Happiness Comic Image](${{ steps.extract_comic_image.outputs.comic_url }})`;
+            github.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: issueComment
             });
