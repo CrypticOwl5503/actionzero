@@ -12,10 +12,13 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v2
 
+      - name: Install pup tool
+        run: sudo apt-get install -y pup
+
       - name: Extract Comic Image URL
         id: extract_comic_image
         run: |
-          comic_url=$(curl -s https://explosm.net/comics/kris-watch | grep -oP 'data-image="(\K[^"]+)')
+          comic_url=$(curl -s https://explosm.net/comics/kris-watch | pup 'img[id="main-comic"] attr{src}')
           echo "::set-output name=comic_url::$comic_url"
 
       - name: Comment Comic Image
