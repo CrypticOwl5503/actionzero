@@ -10,15 +10,12 @@ jobs:
 
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v2
 
-      - name: Install libxml2-utils
-        run: sudo apt-get install -y libxml2-utils
-
-      - name: Extract Comic Image URL
-        id: extract_comic_image
+      - name: Get Comic Image URL
+        id: get_comic_image
         run: |
-          comic_url=$(curl -s https://explosm.net/comics/kris-watch | xmllint --html --xpath 'string(//img[@id="main-comic"]/@src)' -)
+          comic_url=$(curl -s -X POST -H "Content-Type: application/json" -d '{"url":"https://explosm.net/comics/kris-watch","javascript":true}' https://api.scrape.dev/)
           echo "::set-output name=comic_url::$comic_url"
 
       - name: Comment Comic Image
@@ -26,7 +23,7 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            const issueComment = `![Cyanide & Happiness Comic Image](${{ steps.extract_comic_image.outputs.comic_url }})`;
+            const issueComment = `![Cyanide & Happiness Comic Image](${{ steps.get_comic_image.outputs.comic_url }})`;
             github.issues.createComment({
               issue_number: context.issue.number,
               owner: context.repo.owner,
