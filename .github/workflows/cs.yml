@@ -23,27 +23,33 @@ jobs:
     #Get AI generated image
       - name: AI Image Generator
         id: generate_ai
-        run:
-          curl -s https://this-person-does-not-exist.com/en/info.0.json > ai.json
-          echo "::set-output name=ai_image::$(jq -r '.img' ai.json)" 
+        run: |
+          curl -o image.jpg https://thispersondoesnotexist.com/image
+          
+      - name: Upload Image as Comment
+        uses: actions/upload-artifact@v2
+        with:
+          name: generated-image
+          path: image.jpg
     
     #Printing comment(have used Create or Update Comment Github 
     #Action on the Marketplace here
-      - name: Create comment
-        uses: peter-evans/create-or-update-comment@v3
+      - name: Comment on Issue
+        uses: actions/github-script@v4
         with:
-          issue-number: ${{ github.event.issue.number }}
-          body: |
-            Hey there, ${{ steps.usern.outputs.user_n }}! While you were raisisng an issue, we decided to click a photo of you!
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const fs = require('fs');
+            const image = fs.readFileSync('image.jpg', 'base64');
             
-            ![Image](${{ steps.generate_ai.outputs.ai_image }})
-            
-            Is this not your photo? We're sorry, the camera was too bedazelled by your beauty
-            to function properly.
-            
-            [1]: https://github.com/peter-evans/create-or-update-comment
-          reactions: '+1'
-        
+            const body = `![Generated Image](data:image/jpeg;base64,${image})`;
+            github.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: body
+            });
+
     
     
     
