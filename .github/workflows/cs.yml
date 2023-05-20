@@ -1,0 +1,18 @@
+#Workflow name
+name: Create Github Action to comment an AI generated image and a quote
+
+on: 
+  issues:
+    type:
+      - opened
+#Trigger workflow when issue is raised
+jobs:
+  ai_image:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+        
+        
+    
