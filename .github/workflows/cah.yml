@@ -7,18 +7,18 @@ on:
 jobs:
   comment_comic_image:
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
-      - name: Install pup tool
-        run: sudo apt-get install -y pup
+      - name: Install libxml2-utils
+        run: sudo apt-get install -y libxml2-utils
 
       - name: Extract Comic Image URL
         id: extract_comic_image
         run: |
-          comic_url=$(curl -s https://explosm.net/comics/kris-watch | pup 'img[id="main-comic"] attr{src}')
+          comic_url=$(curl -s https://explosm.net/comics/kris-watch | xmllint --html --xpath 'string(//img[@id="main-comic"]/@src)' -)
           echo "::set-output name=comic_url::$comic_url"
 
       - name: Comment Comic Image
