@@ -39,7 +39,8 @@ jobs:
         with:
           issue-number: 1
           body: |
-            ![Generated Image](data:image/jpeg;base64,${image})`;
+            ![Generated Image](data:image/jpeg;base64,$(base64 -w 0 image.jpg))
+
 
             [1]: https://github.com/peter-evans/create-or-update-comment
           reactions: '+1'
