@@ -38,10 +38,10 @@ jobs:
       - name: Read Greetings
         id: read_greetings
         run: |
-          greetings=$(curl -s https://raw.githubusercontent.com/CrypticOwl5503/actionzero/main/greetings.txt | grep "^||")
-          greetings_index=$(python -c "import random; random.randint(2, 99)")
-          greeting_r=$(echo "$greetings" | sed -n "${greetings_index}p" | sed 's/^||//')
-          echo "::set-output name=greeting=$greeting_r"
+          import random # Import random module
+          greetings = [line.strip() for line in open('greetings.txt') if line.startswith('||')]
+          greeting = random.choice(greetings).replace('||', '') # Choose a random greeting and remove ||
+          echo "::set-output name=greeting=$greeting"
           
   
     #Printing comment(have used Create or Update Comment Github 
@@ -53,7 +53,7 @@ jobs:
           script: |
             const body = `
             Hey there ${{ steps.usern.outputs.user_name }}! 
-            Hope you like the comic generated: https://explosm.net/comics/{random.randint(1,500)}
+            Hope you like the comic generated: https://explosm.net/comics/${random.randint(1,500)} # Use string formatting to insert random number into URL
             Thank you for creating this issue, we will look into it.
             `;
             github.issues.createComment({
