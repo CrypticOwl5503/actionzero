@@ -20,7 +20,7 @@ jobs:
     #Getting username to print in message
       - name: Get User
         id: usern
-        run: echo "set-output name=user_n::${{ github.event.issue.user.login }}"
+        run: echo "set-output name=usern::${{ github.event.issue.user.login }}"
     #Python
       - name: Python set up
         uses: actions/setup-python@v3
@@ -52,7 +52,7 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             const body = `
-            Hey there ${{ steps.usern.outputs.user_n }}! 
+            Hey there ${{ steps.usern.outputs.usern }}! 
             Hope you like the greeting generated: "${{ steps.read_greetings.outputs.greeting_r }}"
             Thank you for creating this issue, we will look into it.
             `;
