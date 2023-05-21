@@ -19,7 +19,7 @@ jobs:
      #Getting Issue details to get username
       - name: Get Username
         id: issue
-        run: echo "::set-output name=username::${{ github.event.issue.user.login }}"
+        run: echo "::set-output name=user_name::${{ github.event.issue.user.login }}"
     #Python
       - name: Python set up
         uses: actions/setup-python@v3
@@ -52,7 +52,7 @@ jobs:
           script: |
             
             const body = `
-            Hey there ${{ steps.issue.outputs.username }}! 
+            Hey there ${{ steps.issue.outputs.user_name }}! 
             Hope you like the comic generated: https://explosm.net/comics/${{ steps.random_number.outputs.num }}
             Thank you for creating this issue, we will look into it.
             `;
@@ -62,7 +62,7 @@ jobs:
               repo: context.repo.repo,
               body: body
             });
-
+#YEEET I got the link to my favourite comic
           
 
     
