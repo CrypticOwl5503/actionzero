@@ -42,10 +42,10 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            const body = `${{ steps.choose_greeting.outputs.random_greeting }}
+            const body = `${{ steps.choose_greeting.outputs.random_greeting }}'
             
             Hey there ${{ steps.usern.outputs.user_n }}! Hope you like the greeting generated. 
-            Thank you for creating this issue, we will look into it.'
+            Thank you for creating this issue, we will look into it.
             
             
             github.issues.createComment({
