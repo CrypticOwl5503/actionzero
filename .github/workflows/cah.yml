@@ -12,21 +12,42 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v2
 
-      - name: Get Comic Image URL
-        id: get_comic_image
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+
+      - name: Install Puppeteer
+        run: npm install puppeteer
+
+      - name: Extract Comic Image URL
+        id: extract_comic_image
         run: |
-          comic_url=$(curl -s -X POST -H "Content-Type: application/json" -d '{"url":"https://explosm.net/comics/kris-watch","javascript":true}' https://api.scrape.dev/)
-          echo "::set-output name=comic_url::$comic_url"
+          const puppeteer = require('puppeteer');
+
+          async function getComicImage() {
+            const browser = await puppeteer.launch();
+            const page = await browser.newPage();
+            await page.goto('https://explosm.net/comics/kris-watch');
+            const comicImage = await page.$eval('#main-comic', (element) => element.getAttribute('src'));
+            await browser.close();
+            return comicImage;
+          }
+
+          getComicImage().then((comicImage) => {
+            console.log(`::set-output name=comic_url::${comicImage}`);
+          });
 
       - name: Comment Comic Image
         uses: actions/github-script@v4
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            const issueComment = `![Cyanide & Happiness Comic Image](${{ steps.get_comic_image.outputs.comic_url }})`;
+            const issueComment = `![Cyanide & Happiness Comic Image](${{ steps.extract_comic_image.outputs.comic_url }})`;
             github.issues.createComment({
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
               body: issueComment
             });
+
