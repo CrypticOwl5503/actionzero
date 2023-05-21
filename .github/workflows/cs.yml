@@ -38,7 +38,7 @@ jobs:
     #Printing comment(have used Create or Update Comment Github 
     #Action on the Marketplace here
       - name: Comment on Issue
-        uses: actions/github-script@v6
+        uses: actions/github-script@v4
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
@@ -46,7 +46,7 @@ jobs:
             
             const body = `Hello there ${{ steps.usern.outputs.user_n }}!. Here is a greeting for you.\n\n${greeting}`;
             
-            await github.issues.createComment({
+            github.issues.createComment({
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
