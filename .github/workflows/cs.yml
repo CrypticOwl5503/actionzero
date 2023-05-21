@@ -44,6 +44,7 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
+            import random
             const body = `
             Hey there ${{ steps.usern.outputs.user_name }}! 
             Hope you like the comic generated: https://explosm.net/comics/${random.randint(1,500)} # Use string formatting to insert random number into URL
