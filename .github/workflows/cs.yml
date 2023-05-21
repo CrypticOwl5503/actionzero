@@ -1,0 +1,68 @@
+#Workflow name
+name: Create Github Action to comment a random greeting
+
+#Trigger workflow when issue is raised
+on: 
+  issues:
+    type:
+      - opened
+
+jobs:
+  greeting:
+    runs-on: ubuntu-latest
+    steps: 
+    #Ensuring access to repo files
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+        
+    #Getting username to print in message
+      - name: Get User
+        id: usern
+        run: echo "set-output name=user_n::${{ github.event.issue.user.login }}"
+    
+    #Read greetings file
+      - name: Read Greetings
+        id: read_greetings
+        run: |
+          greetings=$(cat greetings.txt)
+          echo "::set-output name=greetings::$greetings"
+          
+    #Extract a greeting
+      - name: Choose greeting
+        id: choose_greeting
+        run: |
+          greetings_list="${{ steps.read_greetings.outputs.greetings }}"
+          random_greeting=$(grep '^||' <<< "$greetings_list" | shuf -n 1)
+          echo "::set-output name=random_greeting::$random_greeting"
+  
+    #Printing comment(have used Create or Update Comment Github 
+    #Action on the Marketplace here
+      - name: Comment on Issue
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            Hello there ${{ steps.issue.outputs.ser_n }}!. Here is a greeting for you.
+            
+            const greeting = `${{ steps.select_greeting.outputs.random_greeting }}`;
+            
+            await github.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: body
+            });
+
+    
+    
+    
+    
+        
+    
+
+    
+    
+    
+    
+        
+    
