@@ -53,7 +53,7 @@ jobs:
           script: |
             const body = `
             Hey there ${{ steps.usern.outputs.user_name }}! 
-            Hope you like the greeting generated: "${{ steps.read_greetings.outputs.greeting }}"
+            Hope you like the comic generated: https://explosm.net/comics/{random.randint(1,500)}
             Thank you for creating this issue, we will look into it.
             `;
             github.issues.createComment({
