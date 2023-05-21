@@ -46,7 +46,8 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            import random from 'random' // Use import to load ES module
+            // Import the module file
+            const { random } = await import('./random.mjs')
             const body = `
             Hey there ${{ steps.usern.outputs.user_name }}! 
             Hope you like the comic generated: https://explosm.net/comics/${random.int(1,500)} # Use random.int to get a random integer
