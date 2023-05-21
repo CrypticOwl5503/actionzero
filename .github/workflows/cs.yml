@@ -33,13 +33,13 @@ jobs:
         run: |
           python -m pip install --upgrade pip
       
-      #Getting a random number from 100 to 500    
+      #Getting a random number from 100 to 200    
       - name: Generate Random Number
         id: random_number
         run: |
           python - <<EOF
           import random
-          num = random.randint(100, 500)
+          num = random.randint(100, 200)
           print(f"::set-output name=num::{num}")
           EOF
     
