@@ -6,6 +6,8 @@ on:
   issues:
     type:
       - opened
+env:
+  url: https://raw.githubusercontent.com/CrypticOwl5503/actionzero/main/greetings.txt
 
 jobs:
   greeting:
@@ -19,21 +21,28 @@ jobs:
       - name: Get User
         id: usern
         run: echo "set-output name=user_n::${{ github.event.issue.user.login }}"
+    #Python
+      - name: Python set up
+        uses: actions/setup-python@v3
+        with:
+          python-version: '3.x'
+      - name: Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          
+    
+    
+    
     
     #Read greetings file
       - name: Read Greetings
         id: read_greetings
         run: |
-          greetings=$(cat greetings.txt)
-          echo "::set-output name=greetings::$greetings"
+          greetings=$(curl -s https://raw.githubusercontent.com/CrypticOwl5503/actionzero/main/greetings.txt | grep "^||")
+          greetings_index=$(python -c "import random; random.randint(2, 99)")
+          greeting_r=$(echo "$greetings" | sed -n "${greetings_index}p" | sed 's/^||//')
+          echo "::set-output name=greeting_r=$greeting_r"
           
-    #Extract a greeting
-      - name: Choose greeting
-        id: choose_greeting
-        run: |
-          greetings_list="${{ steps.read_greetings.outputs.greetings }}"
-          random_greeting=$(grep '^||' <<< "$greetings_list" | shuf -n 1)
-          echo "::set-output name=random_greeting::$random_greeting"
   
     #Printing comment(have used Create or Update Comment Github 
     #Action on the Marketplace here
@@ -42,7 +51,7 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            const body = `${{ steps.choose_greeting.outputs.random_greeting }}`;
+            const body = `${{ steps.choose_greeting.outputs.greeting_r }}`;
 
             const comment = `
             Hey there ${{ steps.usern.outputs.user_n }}! 
