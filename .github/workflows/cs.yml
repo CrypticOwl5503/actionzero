@@ -46,7 +46,7 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            const random = require('random') // Use require to import random module
+            import random from 'random' // Use import to load ES module
             const body = `
             Hey there ${{ steps.usern.outputs.user_name }}! 
             Hope you like the comic generated: https://explosm.net/comics/${random.int(1,500)} # Use random.int to get a random integer
