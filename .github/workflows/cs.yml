@@ -42,9 +42,9 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            Hello there ${{ steps.issue.outputs.ser_n }}!. Here is a greeting for you.
+            const greeting = `${{ steps.choose_greeting.outputs.random_greeting }}`;
             
-            const greeting = `${{ steps.select_greeting.outputs.random_greeting }}`;
+            const body = `Hello there ${{ steps.usern.outputs.user_n }}!. Here is a greeting for you.\n\n${greeting}`;
             
             await github.issues.createComment({
               issue_number: context.issue.number,
