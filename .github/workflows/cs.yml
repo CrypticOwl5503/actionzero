@@ -30,7 +30,9 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           
-    
+      # Install random module using npm
+      - name: Install random module
+        run: npm install random
     
     
     
