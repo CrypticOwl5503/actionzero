@@ -42,8 +42,13 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            const body = ` Hi there ${{ steps.usern.outputs.user_n }}! 🙌\n${{ steps.choose_greeting.outputs.random_greeting }} \n We're so happy that you created this issue. We'll look into it as soon as possible. 🚀' 
+            const body = `${{ steps.choose_greeting.outputs.random_greeting }}`;
 
+            const comment = `
+            Hey there ${{ steps.usern.outputs.user_n }}! 
+            Hope you like the greeting generated.
+            Thank you for creating this issue, we will look into it.
+            `;
             github.issues.createComment({
               issue_number: context.issue.number,
               owner: context.repo.owner,
