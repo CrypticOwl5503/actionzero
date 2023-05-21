@@ -51,9 +51,7 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            const body = `${{ steps.choose_greeting.outputs.greeting_r }}`;
-
-            const comment = `
+            const body = `
             Hey there ${{ steps.usern.outputs.user_n }}! 
             Hope you like the greeting generated.
             Thank you for creating this issue, we will look into it.
