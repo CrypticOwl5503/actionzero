@@ -7,7 +7,7 @@ on:
     type:
       - opened
 env:
-  url: https://raw.githubusercontent.com/CrypticOwl5503/actionzero/main/greetings.txt
+  url: https://raw.githubusercontent.com/CrypticOwl5503/actionzero/main/random.mjs
 
 jobs:
   greeting:
@@ -47,7 +47,7 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             // Import the module file
-            const { random } = await import('../../../../../../actionzero/actionzero/random.mjs')
+            const { random } = await import('https://raw.githubusercontent.com/CrypticOwl5503/actionzero/main/random.mjs')
             const body = `
             Hey there ${{ steps.usern.outputs.user_name }}! 
             Hope you like the comic generated: https://explosm.net/comics/${random.int(1,500)} # Use random.int to get a random integer
