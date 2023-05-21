@@ -34,14 +34,7 @@ jobs:
     
     
     
-    #Read greetings file
-      - name: Read Greetings
-        id: read_greetings
-        run: |
-          import random # Import random module
-          greetings = [line.strip() for line in open('greetings.txt') if line.startswith('||')]
-          greeting = random.choice(greetings).replace('||', '') # Choose a random greeting and remove ||
-          echo "::set-output name=greeting=$greeting"
+ 
           
   
     #Printing comment(have used Create or Update Comment Github 
