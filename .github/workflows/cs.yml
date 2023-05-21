@@ -1,5 +1,5 @@
 #Workflow name
-name: Create Github Action to comment a random greeting
+name: Create Github Action to generate a CaH comic
 
 #Trigger workflow when issue is raised
 on: 
@@ -28,7 +28,8 @@ jobs:
       - name: Dependencies
         run: |
           python -m pip install --upgrade pip
-          
+      
+      #Getting a random number from 100 to 500    
       - name: Generate Random Number
         id: random_number
         run: |
@@ -44,23 +45,20 @@ jobs:
   
     #Printing comment(have used Create or Update Comment Github 
     #Action on the Marketplace here
-      - name: Comment on Issue
-        uses: actions/github-script@v4
+      - name: Create comment
+        uses: peter-evans/create-or-update-comment@v3
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            
+          issue-number: 1
+          body: |
             const body = `
             Hey there ${{ steps.issue.outputs.username }}! 
             Hope you like the comic generated: https://explosm.net/comics/${{ steps.random_number.outputs.num }}
             Thank you for creating this issue, we will look into it.
             `;
-            github.issues.createComment({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: body
-            });
+
+            [1]: https://github.com/peter-evans/create-or-update-comment
+          reactions: '+1'
+          
 
     
     
