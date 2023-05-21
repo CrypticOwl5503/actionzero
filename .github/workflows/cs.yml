@@ -44,10 +44,10 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            import random
+            const random = require('random') // Use require to import random module
             const body = `
             Hey there ${{ steps.usern.outputs.user_name }}! 
-            Hope you like the comic generated: https://explosm.net/comics/${random.randint(1,500)} # Use string formatting to insert random number into URL
+            Hope you like the comic generated: https://explosm.net/comics/${random.int(1,500)} # Use random.int to get a random integer
             Thank you for creating this issue, we will look into it.
             `;
             github.issues.createComment({
