@@ -41,7 +41,7 @@ jobs:
           greetings=$(curl -s https://raw.githubusercontent.com/CrypticOwl5503/actionzero/main/greetings.txt | grep "^||")
           greetings_index=$(python -c "import random; random.randint(2, 99)")
           greeting_r=$(echo "$greetings" | sed -n "${greetings_index}p" | sed 's/^||//')
-          echo "::set-output name=greeting_r=$greeting_r"
+          echo "::set-output name=greeting=$greeting_r"
           
   
     #Printing comment(have used Create or Update Comment Github 
@@ -53,7 +53,7 @@ jobs:
           script: |
             const body = `
             Hey there ${{ steps.usern.outputs.user_name }}! 
-            Hope you like the greeting generated: "${{ steps.read_greetings.outputs.greeting_r }}"
+            Hope you like the greeting generated: "${{ steps.read_greetings.outputs.greeting }}"
             Thank you for creating this issue, we will look into it.
             `;
             github.issues.createComment({
